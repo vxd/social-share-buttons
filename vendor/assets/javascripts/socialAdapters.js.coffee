@@ -107,8 +107,17 @@ class App.SocialFb extends App.SocialBase
 
       throw new Error("fbAppId is not defined") if not @settings.fbAppId
 
-      params = "app_id=#{@settings.fbAppId}&display=popup&redirect_uri=#{@url}&link=#{@url}&name=#{@title}&description=#{@description}&picture=#{@image}"
-      open "https://www.facebook.com/dialog/feed?#{params}", "_blank", "scrollbars=0, resizable=1, menubar=0, left=100, top=100, width=550, height=440, toolbar=0, status=0"
+      throw new Error("FB is not defined") if not FB
+      
+      FB.ui {
+        app_id: @settings.fbAppId
+        method: 'feed'
+        display: 'popup'
+        picture: decodeURIComponent(@image)
+        description: decodeURIComponent(@description)
+        link: decodeURIComponent(@url)
+        name: decodeURIComponent(@title)
+        }, (response) ->
 
 class App.SocialVk extends App.SocialBase
   type: 'vk'
